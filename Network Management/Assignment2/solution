@@ -1,0 +1,132 @@
+ID-140781 DEFINITIONS ::= BEGIN 
+
+IMPORTS 
+    MODULE-IDENTITY, OBJECT-TYPE, Counter32, Gauge32, Counter64,
+    enterprises              FROM SNMPv2-SMI
+    Integer32, IpAddress, TimeTicks, mib-2,
+    NOTIFICATION-TYPE         FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION, DisplayString,
+    PhysAddress, TruthValue, RowStatus,
+    TimeStamp, AutonomousType, TestAndIncr   FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP,
+    NOTIFICATION-GROUP                     FROM SNMPv2-CONF
+    snmpTraps                          FROM SNMPv2-MIB
+    IANAifType                     FROM IANAifType-MIB;
+  
+
+ahmad MODULE-IDENTITY 
+  LAST-UPDATED "202310200000Z"
+  ORGANIZATION "JUST UNIVERSITY"
+  CONTACT-INFO "Ahmad Abed Al-kader, Yazan Ayoub"
+  DESCRIPTION "Assi #2"
+  REVISION "202310200000Z"
+  DESCRIPTION "access log records"
+  ::= { nes470 25 } 
+
+nes470 OBJECT IDENTIFIER ::= { enterprises 9000}
+
+ahmadTable OBJECT-TYPE 
+  SYNTAX SEQUENCE OF AhmadEntry 
+  MAX-ACCESS not-accessible
+  STATUS current
+  DESCRIPTION "a Webservers access log records of all requests processed by the server"
+  ::= { nes470 10 }
+
+ahmadEntry OBJECT-TYPE 
+  SYNTAX AhmadEntry
+  MAX-ACCESS not-accessible
+  STATUS current
+  DESCRIPTION "Entry on the webserver"
+  INDEX { ipAdd, requestTime } 
+  ::= { ahmadTable 1 }
+
+AhmadEntry ::= SEQUENCE {
+  ipAdd                IpAddress,
+  requestTime          TimeTicks,
+  httpMethod           OCTET STRING,
+  requestClient        OCTET STRING,
+  httpVersion          OCTET STRING,
+  statusCode           Integer32,
+  numberOfByte         Integer32,
+  clientInformation    OCTET STRING
+}
+
+ipAdd OBJECT-TYPE 
+  SYNTAX IpAddress
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The IP address of the client"
+  ::= { ahmadEntry 1 }
+
+requestTime OBJECT-TYPE 
+  SYNTAX TimeTicks
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The timestamp of the request (represented in Epoch Unix time)"
+  ::= { ahmadEntry 2 }
+
+httpMethod OBJECT-TYPE 
+  SYNTAX OCTET STRING 
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The HTTP method"
+  ::= { ahmadEntry 3 }
+
+requestClient OBJECT-TYPE 
+  SYNTAX OCTET STRING
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The resource/file requested"
+  ::= { ahmadEntry 4 }
+
+httpVersion OBJECT-TYPE 
+  SYNTAX OCTET STRING
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The HTTP version"
+  ::= { ahmadEntry 5 }
+
+statusCode OBJECT-TYPE 
+  SYNTAX Integer32 (100..599)
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "Status code of the response"
+  ::= { ahmadEntry 6 }
+
+numberOfByte OBJECT-TYPE 
+  SYNTAX Integer32
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The number of bytes transferred to the client"
+  ::= { ahmadEntry 7 }
+
+clientInformation OBJECT-TYPE 
+  SYNTAX OCTET STRING
+  MAX-ACCESS read-only
+  STATUS current
+  DESCRIPTION "The client's user agent"
+  ::= { ahmadEntry 8 }
+
+id140781Compliance MODULE-COMPLIANCE
+    STATUS current
+    DESCRIPTION "Compliance statement for ID_140781 MIB module"
+    MODULE ID-140781
+    MANDATORY-GROUPS { accessLogGroup }
+    ::= { ahmad 2 }
+
+accessLogGroup OBJECT-GROUP
+    OBJECTS {  ipAdd ,
+  requestTime          ,
+  httpMethod           ,
+  requestClient        ,
+  httpVersion          ,
+  statusCode           ,
+  numberOfByte         ,
+  clientInformation    }
+    STATUS current
+    DESCRIPTION "A collection of objects providing access log information"
+    ::= { ahmad 3 }
+
+
+
+END

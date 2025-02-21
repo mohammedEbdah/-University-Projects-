@@ -1,0 +1,115 @@
+Intro
+
+A restaurant sells only one type of food. Write a C++ program that helps the
+restaurant in managing and tracking the orders. The restaurant processes orders
+sequentially, so that the order that is added first will be processed first. The
+order that is currently being prepared is called the Active Order.
+
+Once the user runs the program, the program shall ask the user to enter the price of
+the food item. This price will be used by the program to calculate the amount the
+customer shall pay. Then, the program shall provide the user with the following
+options by showing a menu (As shown in the screenshot). The user can choose one of
+these options by entering its number (1, 2, 3 etc...). Once the user is done with
+one operation, the program shall show the menu again to allow the user to execute
+another operation. The user can execute as many operations as he or she wants.
+
+Available Options
+
+1. Add Order: When the user chooses to add an order, the program shall ask the user
+to enter the customer's name, and the quantity the customer wants to buy. Once the
+user enters this data, the program shall show the order number (A sequential number)
+as well as the total amount of the order.
+
+2. Print Order Info: When the user chooses to print an order's info, the program
+shall ask the user to enter the order's number. The program shall then print the
+customer's name, requested quantity, total amount, and the number of orders that
+shall be fulfilled before this order.
+
+5. Print Active Order Info: When the user chooses this option, the program shall 
+print the order that is being prepared. The data that shall be printed are order number, 
+customer's name, requested quantity, total amount
+
+4. Fulfill Active Order: This option allows the user to mark the active order as
+fulfilled. When the user chooses this option, the program shall print the number of
+the order that was fulfilled.
+
+5. Cancel Order: When the user chooses to cancel an order, the program shall ask the
+user to enter the order's number. The program shall check that cancelled order is
+not the active order. If it is the active order, it shall not be cancelled and error
+message shall show up to the user.
+
+6. Print Pending Quantity: When the user chooses this option, the program shall
+print out the quantity waiting to be prepared for all pending orders. The quantity 
+shall include the active order's quantity.
+
+7. Print Total Sales: When the user chooses this option, the program shall print out
+the total amount of sales since the program was run.
+
+8. Print Pending Orders Count: When the user chooses this option, the program shall print out 
+the number of orders that are waiting to be fulfilled, including the active order.
+
+9. Print Pending Orders: When the user chooses this option, the program shall print out 
+the orders (Only the number of each order separated by spaces) that are waiting to be fulfilled, including the active order.
+
+Implementation
+
+In order to develop the proposed program, you will need to create the following classes and structs.
+
+1. order struct: An instance of this class will contain data about a single order.
+This class will contain the following member variables: number (int), customerName
+(char*), quantity (int), and totalAmount (double). These member variables must be
+passed to the constructor and they cannot be changed after that.
+
+2. nodeType struct: An instance of this class will represent a single node in the
+linkedList that shall be used to develop the proposed program. This node will
+contain two member variables: order (of type order*) and next (of type nodeType*).
+
+3. restaurantLinkedList: This class shall be implemented as an ordered linked list.
+The nodes shall be sorted by orders' numbers. It will contain the business logic of
+the restaurant. This class shall expose the following methods, which will be called
+from the main function:
+
+- public restuarantLinkedList(double price); //This constructor will accept the
+price per item so that the method addOrder can calculate the order amount. The
+passed parameter shall be stored in a class member variable (E.g. double price)
+
+- public order* addOrder(char* customerName, int quantity); //This method shall
+create a new order and add it to existing orders. The method shall populate the
+number and totalAmount. The order number is a sequential number. So the first order
+takes the number 1, the second order takes the number 2 etc ... You might need to
+declare a class member variable that stores the latest order number. This method
+will return the newly created order
+
+- public order* getOrder(int orderNumber); //This method shall return the order by
+its number
+
+- public order* getActiveOrder(); //This method shall return the active order; that
+is the order that is being prepared
+
+- public int fulfillActiveOrder(); //This method shall delete the active order from the
+linked list. The method shall return the number of the order that was fulfilled
+
+- public bool cancelOrder(int orderNumber); //This method shall delete an order
+from the linked list. If the parameter orderNumber equals the active order's number,
+the method shall not delete the order because it is already being prepared. This
+method shall return true if the order was deleted successfully, otherwise, it shall
+return false
+
+- public int getPendingQuantity(); //This method shall return the sum of all orders'
+quantity including the active order's quantity.
+
+- public double getTotalSales(); //This method shall return the sum amount of orders
+that were already fulfilled. In order to implement this method, you might need to
+define a member variable (E.g. totalAmount) that stores the amounts of fulfilled
+orders. So every time we call the method fulfillOrder, we need to read the active
+order's amount and add it to the the member variable totalAmount.
+
+- public int getPendingOrdersCount(int orderNumber); //This method shall return
+the number of orders that shall be fulfilled before the order with number
+orderNumber
+
+- public int getPendingOrdersCount(); //This method shall return the number of
+orders waiting for fulfillment, including the active order
+
+- public int[] getPendingOrders(); //This method shall return the
+orders waiting for fulfillment, including the active order

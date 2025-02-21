@@ -1,0 +1,110 @@
+module ID-140781{
+	yang-version 1.1;
+	namespace "urn:example:system";
+	prefix "sys";
+	import ietf-yang-types
+	{
+		prefix yang;
+	}
+	import ietf-inet-types
+	{
+		prefix inet;
+	}
+	
+	organization "just.edu";
+	contact "AHMADYAZAN@gmail.com";
+	description
+		"YANG module";
+	revision 2023-12-27
+	{
+		description "Revision.";
+	}
+	
+	container accessLog 
+	{ 
+		
+		list accesslog {
+			key "ipAddress httpMethod resourceFile clientAgent";
+			config true;
+      			description "Access log record";
+      			
+      			leaf ipAddress 
+      			{
+      				type inet:ipv4-address;
+      				mandatory true;
+      				description
+      					"Client IP address";
+      			}
+      			leaf timeStamp
+      			{
+      				type yang:counter64;
+      				mandatory true;
+      				config false;
+      				description
+      					"Time Stamp ";
+      			}
+      			leaf httpMethod
+      			{
+      				type enumeration {
+      					enum GET;
+      					enum POST;
+      					enum PUT;
+      					enum DELETE;
+      				}
+      				mandatory true;
+      				description
+      					"HTTPmETHOD";
+      			}
+      			leaf resourceFile
+      			{
+      				type string;
+      				mandatory true;
+      				description
+      					"RESOURCEfILE";
+      			}
+      			leaf httpVersion
+      			{
+      				type enumeration {
+      					enum "HTTP/1.0";
+      					enum "HTTP/1.1";
+      					enum "HTTP/2";
+      				}
+      				mandatory true;
+      				config false;
+      				description
+      					"HTTPVERSION";
+      			}
+			leaf statusCode 
+      			{
+      				type enumeration {
+      					enum OK { value 200; }
+                                        enum Created { value 201; }
+                                        enum Accepted { value 202; }
+                                        enum BadRequest { value 400; }
+                                        enum Unauthorized { value 401; }
+      	 			}
+      				mandatory true;
+      				config false;
+      				description
+      					"STATUSCODE";
+      			}
+      			leaf numberOfBytes 
+      			{
+      				type yang:counter32;
+      				mandatory true;
+      				config false;
+      				description
+      					"numberOfByets";
+      			}
+      			leaf clientAgent 
+      			{
+      				type string;
+      				mandatory true;
+      				description
+      					"cLIENT aGENT";
+      			}		
+		
+		}
+	
+	}
+}
