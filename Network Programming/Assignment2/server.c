@@ -4,16 +4,16 @@
 #include <string.h>
 #include <arpa/inet.h>
 
-#define PORT 55555 // Change this port if needed
+#define PORT 55555 // Change this port if needed , port the server listens on
 
-typedef struct {
+typedef struct { // struct to hold data for the operands and the operation
     int operand1;
     int operand2;
     char operation;
     int result;
 } Operation;
 
-void perform_operation(Operation *op) {
+void perform_operation(Operation *op) { //performs the arithmetic operation
     switch (op->operation) {
         case '+': // Addition
             op->result = op->operand1 + op->operand2;
@@ -36,31 +36,31 @@ void perform_operation(Operation *op) {
     }
 }
 
-int create_server_socket(int port) {
-    int server_socket;
+int create_server_socket(int port) { //returns descriptor
+    int server_socket; //file descriptor
 
     // Create socket
-    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1) { //IPv4, TCP, appropriate protocol 
         perror("Server_Side > Socket creation failed");
         exit(EXIT_FAILURE);
     }
 
-    struct sockaddr_in server_addr;
+    struct sockaddr_in server_addr;  //sockaddr_in (defined in <netinet/in.h>) that will store the server's IP address and port number
 
     // Prepare the server address structure
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_family = AF_INET; // ipv4
+    server_addr.sin_port = htons(port); //tcp
+    server_addr.sin_addr.s_addr = INADDR_ANY; //bind any available netwrok interface
 
     // Bind the socket
-    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
-        perror("Server_Side > Bind failed");
+    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) { // bind associates the socket with a specific address and port , descriptor ,  &server_addr memory address of the server_addr variable
+        perror("Server_Side > Bind failed"); // error message to standard error, including the specific reason for the failure, based on the global errno variable
         close(server_socket);
-        exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE); // socket creation fails
     }
 
     // Listen for connections
-    if (listen(server_socket, 5) == -1) {
+    if (listen(server_socket, 5) == -1) { // descriptor , maximum number of pending connections
         perror("Server_Side > Listen failed");
         close(server_socket);
         exit(EXIT_FAILURE);
@@ -70,7 +70,7 @@ int create_server_socket(int port) {
     return server_socket;
 }
 
-int accept_client_connection(int server_socket) {
+int accept_client_connection(int server_socket) { // returns descriptor of clients
     int client_socket;
     struct sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
@@ -120,18 +120,18 @@ void close_server_socket(int server_socket) {
     close(server_socket);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) { //num of command passed to program , arrat represnting them , name of program and port num
     if (argc != 2) {
         fprintf(stderr, "Server_Side > Usage: %s <port>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
-    int port = atoi(argv[1]);
+    int port = atoi(argv[1]); // convert to int
 
     int server_socket = create_server_socket(port);
 
     int client_socket;
-    client_socket = accept_client_connection(server_socket);
+    client_socket = accept_client_connection(server_socket); // waits for client
     while (1) {
 
         char operation;
