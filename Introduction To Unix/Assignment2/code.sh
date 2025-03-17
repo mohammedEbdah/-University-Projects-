@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Name: Yazan Momani
-# ID: 137091
 
 if [ $# -gt 1 ]; then
     echo "There are more than one argument. Just add one."
